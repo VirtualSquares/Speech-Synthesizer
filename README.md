@@ -1,2 +1,2 @@
 # Speech-Synthesizer
-A tts and stt ai powered mini project which allows for a user to input content through their microhphone, and return a spoken as well as text based summarized reply using google genai model.
+A tts and stt ai powered application which allows users to enter input through their microphone, and return a spoken response confirming if the statement in putted is fact or not.
