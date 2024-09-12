@@ -61,7 +61,7 @@ try:
     cText = recognizer.recognize_google(audio)
     print("You said:", cText)
     
-    response = model.generate_content("Summarize this in a shortened form: " + cText)
+    response = model.generate_content("Fact Check This: " + cText)
     response_text = response.text
     print("Response from model:", response_text)
     
