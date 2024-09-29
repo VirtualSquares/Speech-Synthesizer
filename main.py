@@ -1,4 +1,4 @@
-
+from flask import Flask, render_template, jsonify
 import speech_recognition as sr
 import google.generativeai as genai
 import pyttsx3
@@ -46,31 +46,48 @@ model = genai.GenerativeModel(
     safety_settings=safety_settings
 )
 
-convo = model.start_chat(history=[])
+app = Flask(__name__)
 
-recognizer = sr.Recognizer()
-tts_engine = pyttsx3.init()
+@app.route('/')
+def index():
+    return render_template('index.html')
 
-tts_engine.setProperty('rate', 120)
+@app.route('/fact_check', methods=['POST'])
+def fact_check():
+    recognizer = sr.Recognizer()
+    tts_engine = pyttsx3.init()
+    tts_engine.setProperty('rate', 120)
 
-with sr.Microphone() as source:
-    print("Listening...")
-    audio = recognizer.listen(source)
+    with sr.Microphone() as source:
+        print("Listening...")
+        audio = recognizer.listen(source)
 
-try:
-    cText = recognizer.recognize_google(audio)
-    print("You said:", cText)
-    
-    response = model.generate_content("Fact Check This: " + cText)
-    response_text = response.text
-    print("Response from model:", response_text)
-    
-    tts_engine.say(response_text)
-    tts_engine.runAndWait()
+    try:
+        cText = recognizer.recognize_google(audio)
+        print("You said:", cText)  # Debug output
 
-except sr.UnknownValueError:
-    print("Sorry, I could not understand the audio.")
-except sr.RequestError as e:
-    print(f"Could not request results from Google Speech Recognition service; {e}")
-except Exception as e:
-    print(f"An error occurred: {e}")
+        if not cText:
+            return jsonify({'error': "No text provided for summarization."})
+
+        response = model.generate_content("Summarize this into a shorter version through multiple bullet points, max of 10, this is the bullet point you should use: • " + cText)
+        response_text = response.text
+
+        print("Response from model:", response_text)  # Debug output
+
+        if not response_text:
+            return jsonify({'error': "The model did not return any response."})
+
+        tts_engine.say(response_text)
+        tts_engine.runAndWait()
+
+        return jsonify({'response': response_text})
+
+    except sr.UnknownValueError:
+        return jsonify({'error': "Sorry, I could not understand the audio."})
+    except sr.RequestError as e:
+        return jsonify({'error': f"Could not request results from Google Speech Recognition service; {e}"})
+    except Exception as e:
+        return jsonify({'error': f"An error occurred: {e}"})
+
+if __name__ == '__main__':
+    app.run(debug=True)
