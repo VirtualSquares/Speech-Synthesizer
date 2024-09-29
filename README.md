@@ -1,2 +1,2 @@
 # Speech-Synthesizer
-A tts and stt ai powered application which allows users to enter input through their microphone, and return a spoken response confirming if the statement in putted is fact or not.
+A tts and stt ai powered website which allows a user to input audio through their microphone, and outputs a summarized text based response along with audio.
