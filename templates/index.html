@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+    <title>Fact Checker</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Comfortaa:wght@300..700&display=swap" rel="stylesheet">
+</head>
+
+<body>
+    <h1>Fact Checker</h1>
+    <button id="start-button">Start Listening</button>
+    <div id="response"></div>
+
+    <script>
+        document.getElementById('start-button').onclick = function () {
+
+            let start_button = document.getElementById("start-button");
+            start_button.style.background = "green";
+            
+
+            fetch('/fact_check', { method: 'POST' })
+                .then(response => response.json())
+                .then(data => {
+                    document.getElementById('response').innerText = data.response || data.error;
+                    start_button.style.background = "white";
+                })
+                .catch(error => {
+                    document.getElementById('response').innerText = "An error occurred: " + error;
+                });
+        };
+
+    </script>
+</body>
+
+</html>
