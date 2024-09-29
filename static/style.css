@@ -1,0 +1,26 @@
+body {
+    font-family: Arial, sans-serif;
+    text-align: center;
+    padding: 20px;
+    background-color: #424769;
+    color: white;
+    font-family: "Comfortaa";
+}
+
+button {
+    padding: 10px 20px;
+    font-size: 16px;
+    cursor: pointer;
+    font-family: "Comfortaa";
+    border-radius: 2px;
+}
+
+#response {
+    margin-top: 20px;
+    font-size: 18px;
+    color: white;
+    border: 1px solid white;
+    padding: 10px;
+    width: 100%;
+    font-size: 30px;
+}
